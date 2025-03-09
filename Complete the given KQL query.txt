@@ -27,3 +27,13 @@
 "2", "Bob", "San Francisco"
 "3", "Charlie", "Los Angeles"
 "4", "Ravi", "Chennai"
+
+
+// Query
+Sales
+| extend Date = format_datetime(SaleDate, 'yyyy-MM-dd')
+| join kind = inner (Customers) on CustomerID
+| project CustomerName, Date, SaleAmount, PaymentMode
+| filter SaleAmount > 75
+| summarize PaymentModesUsed = make_list(PaymentMode) by CustomerName, Date
+
