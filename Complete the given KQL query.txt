@@ -8,25 +8,25 @@
 
 // Add data into Sales Table
 .ingest inline into table Sales <|
-"1", 200.50, datetime(2025-03-01 08:00:00), "CREDIT"
-"2", 150.75, datetime(2025-03-02 09:30:00), "CREDIT"
-"3", 350.00, datetime(2025-03-02 10:15:00), "CREDIT"
-"1", 100.00, datetime(2025-03-03 11:00:00), "CASH"
-"2", 500.00, datetime(2025-03-04 14:45:00), "CASH"
-"1", 80.00, datetime(2025-03-03 11:00:00), "CHEQUE"
-"2", 190.00, datetime(2025-03-02 11:30:00), "CASH"
-"3", 100.00, datetime(2025-03-03 11:00:00), "CHEQUE"
-"2", 50.00, datetime(2025-03-04 14:45:00), "CHEQUE"
-"2", 200.00, datetime(2025-03-02 09:45:00), "CHEQUE"
-"1", 75.00, datetime(2025-03-03 11:00:00), "CHEQUE"
+1, 200.50, datetime(2025-03-01 08:00:00), CREDIT
+2, 150.75, datetime(2025-03-02 09:30:00), CREDIT
+3, 350.00, datetime(2025-03-02 10:15:00), CREDIT
+1, 100.00, datetime(2025-03-03 11:00:00), CASH
+2, 500.00, datetime(2025-03-04 14:45:00), CASH
+1, 80.00, datetime(2025-03-03 11:00:00), CHEQUE
+2, 190.00, datetime(2025-03-02 11:30:00), CASH
+3, 100.00, datetime(2025-03-03 11:00:00), CHEQUE
+2, 50.00, datetime(2025-03-04 14:45:00), CHEQUE
+2, 200.00, datetime(2025-03-02 09:45:00), CHEQUE
+1, 75.00, datetime(2025-03-03 11:00:00), CHEQUE
 
 
 // Add data into Customers Table
 .ingest inline into table Customers <|
-"1", "Alice", "New York"
-"2", "Bob", "San Francisco"
-"3", "Charlie", "Los Angeles"
-"4", "Ravi", "Chennai"
+1, Alice, New York
+2, Bob, San Francisco
+3, Charlie, Los Angeles
+4, Ravi, Chennai
 
 
 // Query
