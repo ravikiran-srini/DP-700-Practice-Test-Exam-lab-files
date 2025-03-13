@@ -1,0 +1,57 @@
+.create table tableA (MachineID: int, Machine: guid, Data: dynamic)
+
+.create table tableB (MachineID: int, Machine: guid, Data: dynamic)
+
+// Encapsulating the transformation logic from TableA to TableB in a function
+
+.execute database script <|
+  .create-or-alter function tableA_to_tableB() {
+    tableA
+    | project MachineID, Machine, Data
+  }
+
+// Creating the update policies for the destination table, tableB
+
+.execute database script <|
+  .alter table tableB policy update "[{\"IsEnabled\":true,\"Source\":\"tableA\",\"Query\":\"tableA_to_tableB\",\"IsTransactional\":false,\"PropagateIngestionProperties\":true,\"ManagedIdentity\":null}]"
+
+// Ingest data into tableA.
+
+  .set-or-append tableA <|
+  let Raw_Stream = datatable(MachineID: int, Machine: guid, Data: dynamic)
+    [
+    int(12), guid(8937f9d4-9133-42ec-b32f-e756436092f7), dynamic({"id1": 0, "partid": "57"}),
+    int(14), guid(af7d79c1-c33f-445d-8e4b-acb14c282fcd), dynamic({"id1": 0, "partid": "45"}),
+    int(13), guid(6551a014-8d94-473e-b5dc-0ae4523e26bb), dynamic({"id1": 0, "partid": "33"})
+  ];
+  Raw_Stream
+
+// Ingest data into tableA. Scenario A:
+
+  .set-or-append tableA <|
+  let Raw_Stream = datatable(MachineID: int, Machine: guid, Data: dynamic)
+    [
+    int(15), guid(2a789d90-2baa-4949-85ef-7acb80f20a2d), dynamic({"id1": 0, "partid": "57", "count": "12"})
+  ];
+  Raw_Stream
+
+tableA;
+tableB;
+
+// Scenario B:
+
+  .alter column ['tableA'].['Machine'] type= string
+
+  tableA;
+
+// Insert a record into tableA
+
+  .set-or-append tableA <|
+  let Raw_Stream = datatable(MachineID: int, Machine: string, Data: dynamic)
+    [
+    int(16), "2a789d90-2baa-4949-85ef-7acb80f20a2d", dynamic({"id1": 0, "partid": "57", "count": "99"})
+  ];
+  Raw_Stream
+
+    tableA;
+    tableB;
