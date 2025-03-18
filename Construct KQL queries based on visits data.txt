@@ -1,0 +1,36 @@
+// Visits table
+
+.create table Visits (UserID: string, VisitTime:datetime, orderedAmount: long)
+
+// Ingest data into the Visits table.
+
+.ingest inline into table Visits <|
+    A, datetime(2024-04-10 09:00:00), 105
+    B, datetime(2024-04-10 10:00:00), 101
+    A, datetime(2024-04-10 09:05:00), 204
+    A, datetime(2024-04-10 09:20:00), 305
+    B, datetime(2024-04-10 10:10:00), 178
+    B, datetime(2024-04-10 10:25:00), 205
+    B, datetime(2024-04-10 09:50:00), 162
+    A, datetime(2024-04-10 09:45:00), 100
+    B, datetime(2024-04-10 10:20:00), 185
+  
+
+// Query 1
+
+Visits
+| sort by UserID asc
+| extend OrderedAmountRunningTotal = row_cumsum (orderedAmount, UserID != prev(UserID))
+
+
+// Query 2
+
+Visits
+| sort by UserID asc, VisitTime asc
+| extend SessionStart = row_window_session(VisitTime, 30m, 10m, UserID != prev(UserID))
+| extend nthVisitInSession = row_number(1, SessionStart != prev(SessionStart))
+
+
+
+
+
