@@ -1,0 +1,50 @@
+-- Creating schema for Sales
+CREATE SCHEMA sales;
+GO
+
+-- Create a table to store sales data
+CREATE TABLE sales.Orders (
+    SaleID INT,
+    SalesRep VARCHAR(100),
+    ProductName VARCHAR(50),
+    SaleAmount DECIMAL(10, 2),
+    SaleDate DATE
+);
+
+-- Insert sample data. Replace the Email of SalesRep with yours.
+INSERT INTO sales.Orders (SaleID, SalesRep, ProductName, SaleAmount, SaleDate)
+VALUES
+    (1, 'clientone@ravikirans.com', 'Smartphone', 500.00, '2023-08-01'),
+    (2, 'clientone@ravikirans.com', 'Laptop', 1000.00, '2023-08-02'),
+    (3, 'clienttwo@ravikirans.com', 'Headphones', 120.00, '2023-08-03'),
+    (4, 'clientone@ravikirans.com', 'Tablet', 800.00, '2023-08-04'),
+    (5, 'clienttwo@ravikirans.com', 'Smartwatch', 300.00, '2023-08-05'),
+    (6, 'clientone@ravikirans.com', 'Gaming Console', 400.00, '2023-08-06'),
+    (7, 'clientthree@ravikirans.com', 'TV', 700.00, '2023-08-07'),
+    (8, 'clienttwo@ravikirans.com', 'Wireless Earbuds', 150.00, '2023-08-08'),
+    (9, 'clientthree@ravikirans.com', 'Fitness Tracker', 80.00, '2023-08-09'),
+    (10, 'clientthree@ravikirans.com', 'Camera', 600.00, '2023-08-10');
+
+
+-- Creating schema for Security
+CREATE SCHEMA Security;
+GO
+
+
+-- Creating a function for the SalesRep evaluation
+CREATE FUNCTION Security.tvf_salessecuritypredicate(@UserName AS varchar(50))
+    RETURNS TABLE
+WITH SCHEMABINDING
+AS
+    RETURN SELECT 1 AS tvf_salessecuritypredicate_result
+WHERE @UserName = USER_NAME();
+GO
+
+
+-- Using the function to create a Security Policy
+CREATE SECURITY POLICY SalesRepFilter
+ADD FILTER PREDICATE Security.tvf_salessecuritypredicate(SalesRep)
+ON sales.Orders
+WITH (STATE = ON);
+GO
+
