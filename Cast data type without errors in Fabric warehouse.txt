@@ -1,0 +1,40 @@
+--CREATE SALES TABLE
+
+CREATE TABLE Sales (
+    SaleID INT NOT NULL,
+    SalesDate DATETIME2(0),
+    ProductName VARCHAR(100) NOT NULL,
+    Quantity INT NOT NULL,
+    UnitPrice VARCHAR(100) NOT NULL
+);
+
+
+--INSERT DATA INTO THE SALES TABLE
+
+INSERT INTO Sales (SaleID, SalesDate, ProductName, Quantity, UnitPrice) VALUES
+(1, '2024-03-01 10:00:00', 'Laptop', 2, '1200'),
+(2, '2024-03-02 11:30:00', 'Smartphone', 5, '800.50'),
+(3, '2024-03-03 14:45:00', 'Tablet', 3, '450'),
+(4, '2024-03-04 09:15:00', 'Monitor', 4, '300'),
+(5, '2024-03-05 16:30:00', 'Headphones', 10, '150.12');
+
+
+
+--Cast datetime to date
+
+SELECT CAST ( SalesDate AS DATE ) AS SalesDate FROM Sales
+
+
+--Throws an error.
+
+SELECT CAST ( SalesDate AS DATE ),
+       ProductName,
+       CAST ( UnitPrice AS INT ) FROM Sales
+
+
+
+--Executes successfully.
+
+SELECT CAST ( SalesDate AS DATE ) AS SalesDate,
+       ProductName,
+       TRY_CONVERT ( INT, UnitPrice ) AS UnitPrice FROM Sales
