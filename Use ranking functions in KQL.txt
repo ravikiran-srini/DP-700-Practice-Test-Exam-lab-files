@@ -1,0 +1,28 @@
+datatable (Product:string, Channel:string, UnitsSold:long)
+[
+    "Laptop", "eCommerce", 300,
+    "Laptop", "Offline", 900,
+    "Laptop", "Phone", 500,
+    "Smartwatch", "eCommerce", 300,
+    "Smartwatch", "Offline", 100,    
+    "Laptop", "Partner", 900,
+    "Smartwatch", "Phone", 300,
+    "Smartwatch", "Partner", 900
+]
+| sort by Product desc, UnitsSold desc
+| extend Rank=row_rank_min(UnitsSold, prev(Product) != Product)
+
+
+datatable (Product:string, Channel:string, UnitsSold:long)
+[
+    "Laptop", "eCommerce", 300,
+    "Laptop", "Offline", 900,
+    "Laptop", "Phone", 500,
+    "Smartwatch", "eCommerce", 300,
+    "Smartwatch", "Offline", 100,    
+    "Laptop", "Partner", 900,
+    "Smartwatch", "Phone", 300,
+    "Smartwatch", "Partner", 900
+]
+| sort by Product desc, UnitsSold desc
+| extend Rank=row_rank_dense(UnitsSold, prev(Product) != Product)
