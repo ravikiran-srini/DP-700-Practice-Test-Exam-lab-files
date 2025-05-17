@@ -1,0 +1,7 @@
+INSERT INTO sales_orders (SalesID, ProductID, SKU, CreatedDate, LastModifiedDate, Quantity, UnitCost)
+VALUES
+(11, 1, 'sKU100', '05/01/2025', '05/01/2025', 5, 100),
+(12, 2, 'SKU200', '04/30/2025', '04/30/2025', 10, 140);
+
+
+SELECT MAX(CreatedDate) FROM [dbo].[sales_orders]

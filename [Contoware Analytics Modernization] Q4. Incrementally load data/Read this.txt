@@ -1,0 +1,7 @@
+To import dataflow gen2 into your Fabric environment, create a new 
+Dataflow Gen2, ---> Import from dataflows (available on the main page) --> upload the .pqt file
+
+After uploading dataflow gen2, configure the source and destination connections as per your Fabric environment.
+
+
+For importing a pipeline, create a new pipeline in Fabric and click Import
