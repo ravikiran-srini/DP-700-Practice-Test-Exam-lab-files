@@ -1,0 +1,1 @@
+Directly upload the .zip files to Fabric Pipeline. Do not extract.
