@@ -4,4 +4,7 @@ Dataflow Gen2, ---> Import from dataflows (available on the main page) --> uploa
 After uploading dataflow gen2, configure the source and destination connections as per your Fabric environment.
 
 
-For importing a pipeline, create a new pipeline in Fabric and click Import
+For importing a pipeline, create a new pipeline in Fabric and click Import.
+Do not extract the pipeline zip file. Directly import the zip file.
+
+
