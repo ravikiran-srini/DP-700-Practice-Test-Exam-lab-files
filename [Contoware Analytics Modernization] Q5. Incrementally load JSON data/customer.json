@@ -1,0 +1,102 @@
+[
+    {
+      "CustomerID": 1,
+      "FirstName": "Alice",
+      "LastName": "Johnson",
+      "Email": "alice.johnson@example.com",
+      "Phone": "555-1234",
+      "City": "New York",
+			"CreatedDate": "05/05/2025",
+			"LastModifiedDate": "05/05/2025"
+    },
+    {
+      "CustomerID": 2,
+      "FirstName": "Bob",
+      "LastName": "Smith",
+      "Email": "bob.smith@example.com",
+      "Phone": "555-2345",
+      "City": "Los Angeles",
+			"CreatedDate": "05/06/2025",
+			"LastModifiedDate": "05/06/2025"
+    },
+    {
+      "CustomerID": 3,
+      "FirstName": "Carol",
+      "LastName": "Davis",
+      "Email": "carol.davis@example.com",
+      "Phone": "555-3456",
+      "City": "Chicago",
+			"CreatedDate": "05/06/2025",
+			"LastModifiedDate": "05/06/2025"
+    },
+    {
+      "CustomerID": 4,
+      "FirstName": "David",
+      "LastName": "Martinez",
+      "Email": "david.martinez@example.com",
+      "Phone": "555-4567",
+      "City": "Houston",
+			"CreatedDate": "05/07/2025",
+			"LastModifiedDate": "05/07/2025"
+    },
+    {
+      "CustomerID": 5,
+      "FirstName": "Eva",
+      "LastName": "Brown",
+      "Email": "eva.brown@example.com",
+      "Phone": "555-5678",
+      "City": "Phoenix",
+			"CreatedDate": "05/05/2025",
+			"LastModifiedDate": "05/05/2025"
+    },
+    {
+      "CustomerID": 6,
+      "FirstName": "Frank",
+      "LastName": "Wilson",
+      "Email": "frank.wilson@example.com",
+      "Phone": "555-6789",
+      "City": "Philadelphia",
+			"CreatedDate": "05/05/2025",
+			"LastModifiedDate": "05/05/2025"
+    },
+    {
+      "CustomerID": 7,
+      "FirstName": "Grace",
+      "LastName": "Moore",
+      "Email": "grace.moore@example.com",
+      "Phone": "555-7890",
+      "City": "San Antonio",
+			"CreatedDate": "05/04/2025",
+			"LastModifiedDate": "05/04/2025"
+    },
+    {
+      "CustomerID": 8,
+      "FirstName": "Henry",
+      "LastName": "Taylor",
+      "Email": "henry.taylor@example.com",
+      "Phone": "555-8901",
+      "City": "San Diego",
+			"CreatedDate": "05/06/2025",
+			"LastModifiedDate": "05/06/2025"
+    },
+    {
+      "CustomerID": 9,
+      "FirstName": "Ivy",
+      "LastName": "Anderson",
+      "Email": "ivy.anderson@example.com",
+      "Phone": "555-9012",
+      "City": "Dallas",
+			"CreatedDate": "05/07/2025",
+			"LastModifiedDate": "05/07/2025"
+    },
+    {
+      "CustomerID": 10,
+      "FirstName": "Jacks",
+      "LastName": "Thomas",
+      "Email": "jack.thomas@example.com",
+      "Phone": "555-4444",
+      "City": "San Jose",
+			"CreatedDate": "05/07/2025",
+			"LastModifiedDate": "05/20/2025"
+    }
+  ]
