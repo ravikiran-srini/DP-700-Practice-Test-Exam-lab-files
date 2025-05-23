@@ -1,0 +1,56 @@
+CREATE TABLE products (
+    ProductID INT PRIMARY KEY,
+    ProductName VARCHAR(100),
+    ProductCategoryID INT,
+    Price DECIMAL(10, 2)
+);
+
+CREATE TABLE product_categories (
+    ProductCategoryID INT PRIMARY KEY,
+    CategoryName VARCHAR(100)
+);
+
+CREATE TABLE sales_orders (
+    SalesID INT PRIMARY KEY,
+    ProductID INT NOT NULL,
+    SKU VARCHAR(50) NOT NULL,
+    CreatedDate DATE, 
+    LastModifiedDate VARCHAR(50), -- VARCHAR instead of DATE is necessary to get dates inserted in two different formats
+    Quantity INT NOT NULL,
+    UnitCost DECIMAL(10, 2) NULL
+);
+
+
+INSERT INTO Products (ProductID, ProductName, ProductCategoryID, Price)
+VALUES
+    (1, 'iPhone 14', 1, 999.99),
+    (2, 'Samsung Galaxy S23', 1, 849.99),
+    (3, 'MacBook Pro', 1, 1999.99),
+    (4, 'Dell XPS 13', 1, 1499.99),
+    (5, 'Men''s T-Shirt', 2, 19.99),
+    (6, 'Men''s Jeans', 2, 39.99),
+    (7, 'Women''s Dress', 2, 59.99),
+    (8, 'Women''s Blouse', 2, 29.99),
+    (9, 'Blender', 3, 79.99),
+    (10, 'Microwave Oven', 3, 129.99),
+    (11, 'iPad', 4, 600.99),
+    (12, 'Sony headphones', null, 129.00);
+
+INSERT INTO product_categories (ProductCategoryID, CategoryName)
+VALUES 
+    (1, 'Electronics'),
+    (2, 'Clothing'),
+    (3, 'Home Appliances');
+
+INSERT INTO sales_orders (SalesID, ProductID, SKU, CreatedDate, LastModifiedDate, Quantity, UnitCost)
+VALUES
+(1, 1, 'sKU100', '04/29/2025', '04/29/2025', 5, 100),
+(2, 2, 'SKU200', '04/30/2025', '04/30/2025', 10, 140),
+(3, 3, 'sku300', '04/28/2025', '04/28/2025', 20, 150),
+(4, 1, 'sku100', '04/27/2025', '04-27-2025', 8, 40),
+(5, 4, 'SKU500', '04/28/2025', '04/28/2025', 15, 200),
+(6, 5, 'sku600', '04/29/2025', NULL, 30, 250),
+(7, 6, 'SKU700', '04/27/2025', '04-27-2025', 10, 90),
+(8, 2, 'sku200', '04/26/2025', '04/26/2025', 25, 80),
+(9, 3, 'SKU300', '04/28/2025', '04/28/2025', 12, 120),
+(10, 7, 'sku800', '04/29/2025', '04-29-2025', 18, 175);
