@@ -1,2 +1,0 @@
-For importing a pipeline, create a new pipeline in Fabric and click Import.
-Directly upload the .zip files to Fabric Pipeline. Do not extract.
