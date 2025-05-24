@@ -1,0 +1,4 @@
+The labs for this question can only be completed in sequence.
+
+Refer to the labs in the previous case study questions and set them up before
+using the Python notebook in this lab.
