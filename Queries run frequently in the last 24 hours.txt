@@ -1,0 +1,13 @@
+SELECT
+  query_hash,
+  number_of_runs,
+  number_of_successful_runs,
+  number_of_failed_runs,
+  number_of_canceled_runs,
+  avg_total_elapsed_time_ms,
+  last_run_start_time,
+  last_run_command
+FROM
+  queryinsights.frequently_run_queries
+WHERE
+  last_run_start_time >= DATEADD(HOUR, -24, GETUTCDATE())
