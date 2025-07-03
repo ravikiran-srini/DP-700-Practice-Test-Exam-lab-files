@@ -1,0 +1,50 @@
+CREATE TABLE employees (
+    id INT,
+    email VARCHAR(255),
+    full_name VARCHAR(100),
+    salary INT,
+    department VARCHAR(50),
+    join_date DATE,
+    is_active BIT
+);
+
+
+
+INSERT INTO employees (id, email, full_name, salary, department, join_date, is_active)
+VALUES
+(1, 'alice@example.com', 'Alice Johnson', 75000, 'Engineering', '2021-04-15', 1),
+(2, 'bob@example.com', 'Bob Smith', 62000, 'Marketing', '2020-09-01', 1),
+(3, 'charlie@example.com', 'Charlie Lee', 85000, 'Product', '2019-07-10', 0),
+(4, 'diana@example.com', 'Diana King', 90000, 'HR', '2022-01-20', 1),
+(5, 'eric@example.com', 'Eric Brown', 71000, 'Engineering', '2023-05-05', 1);
+
+
+SELECT * FROM employees
+
+
+-- Apply email mask
+
+ALTER TABLE employees
+ALTER COLUMN email 
+ADD MASKED WITH (FUNCTION = 'email (2,"@",4)');
+
+ALTER TABLE employees
+ALTER COLUMN email 
+ADD MASKED WITH (FUNCTION = 'partial(2,"@",4)');
+
+
+-- Apply default mask for salary
+ALTER TABLE employees
+ALTER COLUMN salary ADD MASKED WITH (FUNCTION = 'default()');
+
+ALTER TABLE employees
+ALTER COLUMN salary 
+ADD MASKED WITH (FUNCTION = 'random(60000, 100000)');
+
+
+-- Drop masks from both columns
+ALTER TABLE employees
+ALTER COLUMN email DROP MASKED;
+
+ALTER TABLE employees
+ALTER COLUMN salary DROP MASKED;
