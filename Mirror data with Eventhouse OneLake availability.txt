@@ -1,0 +1,36 @@
+--In KQL Queryset
+
+.ingest inline into table IoT <|
+"{
+    ""rawData"": {
+        ""workOrderId"": ""abcd1234-5678-9012-efgh-34567890abcd"",
+        ""machineId"": ""M399"",
+        ""data"": [
+            {
+                ""name"": ""sensor-99"",
+                ""timestamp"": ""1649811832742799"",
+                ""timeDelta"": [123000, 456000],
+                ""values"": [""0.55"", ""0.77""]
+            }
+        ]
+    },
+    ""IngestionTime"": ""2025-07-08T15:00:00Z""
+}"
+
+
+
+
+
+--In KQL Queryset
+
+.alter-merge table IoT policy mirroring dataformat=parquet with (IsEnabled=true, TargetLatencyInMinutes=5);
+.show database eventhouse operations mirroring-statistics
+
+
+
+
+--In notebook
+
+delta_table_path = 'abfss://<<workspaceGUID>>@onelake.dfs.fabric.microsoft.com/<<eventhouseGUID>>/Tables/IoT'
+df = spark.read.format("delta").load(delta_table_path)
+display(df)
