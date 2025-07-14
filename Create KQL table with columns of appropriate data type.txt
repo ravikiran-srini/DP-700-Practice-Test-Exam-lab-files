@@ -1,0 +1,34 @@
+//Create table (Incorrect)
+
+.create table JobExecutionLogs (
+job_id:guid, start_time:datetime, succeeded:bool,
+duration:datetime, metrics:json, billing_amount:decimal )
+
+
+//Create table (Incorrect)
+
+.create table JobExecutionLogs (
+job_id:guid, start_time:datetime, succeeded:bool,
+duration:datetime, metrics:dynamic, billing_amount:decimal )
+
+
+//Insert data into the table
+.ingest inline into table JobExecutionLogs <|
+"f1d0a750-405e-4ac5-b257-b937c6f03f85","2025-07-12T09:03:00Z","00:02:34.5000000","true","{""cpu_pct"":74.5,""memory_mb"":1420}","1.375"
+
+
+.drop table JobExecutionLogs ifexists
+
+
+
+//Create table (correct)
+
+.create table JobExecutionLogs (
+job_id:guid, start_time:datetime, succeeded:bool,
+duration:timespan, metrics:dynamic, billing_amount:decimal )
+
+
+//Insert data into the table
+.ingest inline into table JobExecutionLogs <|
+"f1d0a750-405e-4ac5-b257-b937c6f03f85","2025-07-12T09:03:00Z","00:02:34.5000000","true","{""cpu_pct"":74.5,""memory_mb"":1420}","1.375"
+
