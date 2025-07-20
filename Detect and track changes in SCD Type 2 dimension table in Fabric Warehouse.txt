@@ -1,0 +1,90 @@
+-- Step 1: Create Dimension Table
+CREATE TABLE DimCustomer (
+    CustomerCode VARCHAR(10),
+    Name VARCHAR(100),
+    Location VARCHAR(100),
+    ValidFrom DATETIME2(3),
+    ValidTo DATETIME2(3),
+    IsCurrent INT
+);
+
+
+-- Step 2: Seed Initial Dimension Data
+INSERT INTO DimCustomer
+VALUES
+('C001', 'Alice', 'New York', '2023-01-01 00:00:00.000', '9999-12-31 23:59:59.999', 1),
+('C002', 'Bob',   'Chicago',  '2023-01-01 00:00:00.000', '9999-12-31 23:59:59.999', 1);
+
+
+-- Step 3: Create Staging Table
+CREATE TABLE StgCustomer (
+    CustomerCode VARCHAR(10),
+    Name VARCHAR(100),
+    Location VARCHAR(100)
+);
+
+
+-- Step 4: Insert Staging Data (C002 is changed)
+INSERT INTO StgCustomer
+VALUES
+('C001', 'Alice', 'New York'),     -- no change
+('C002', 'Bob',   'Seattle');      -- Location changed
+
+
+--Uptil now given in the question. The below commands are explanations.
+
+
+-- Step 5: Create and Insert DimCurrentHash using SELECT INTO
+SELECT 
+    CustomerCode,
+    CONVERT(VARBINARY(32), HASHBYTES('SHA2_256',
+        CONCAT_WS('|', CustomerCode, Name, Location)
+    )) AS RowHash
+INTO DimCurrentHash
+FROM DimCustomer
+WHERE IsCurrent = 1;
+
+-- Step 6: Create and Insert StgCustomerHash using SELECT INTO
+SELECT 
+    CustomerCode,
+    CONVERT(VARBINARY(32), HASHBYTES('SHA2_256',
+        CONCAT_WS('|', CustomerCode, Name, Location)
+    )) AS RowHash
+INTO StgCustomerHash
+FROM StgCustomer;
+
+
+SELECT * FROM DimCurrentHash
+SELECT * FROM StgCustomerHash
+
+
+-- Step 7: Expire Old Rows (SCD Type 2)
+UPDATE DimCustomer
+SET 
+    ValidTo = GETDATE(),
+    IsCurrent = 0
+WHERE CustomerCode IN (
+    SELECT sc.CustomerCode
+    FROM DimCurrentHash dc
+    JOIN StgCustomerHash sc ON dc.CustomerCode = sc.CustomerCode
+    WHERE dc.RowHash <> sc.RowHash
+)
+AND IsCurrent = 1;
+
+
+SELECT * FROM DimCustomer
+
+
+-- Step 8: Insert New Rows (SCD Type 2)
+INSERT INTO DimCustomer (CustomerCode, Name, Location, ValidFrom, ValidTo, IsCurrent)
+SELECT s.CustomerCode, s.Name, s.Location, GETDATE(), '9999-12-31 23:59:59.999', 1
+FROM StgCustomer s
+JOIN StgCustomerHash sc ON s.CustomerCode = sc.CustomerCode
+JOIN DimCurrentHash dc ON sc.CustomerCode = dc.CustomerCode
+WHERE dc.RowHash <> sc.RowHash;
+
+
+-- Step 9: View Final Result
+SELECT * FROM DimCustomer ORDER BY CustomerCode, ValidFrom;
+
+
