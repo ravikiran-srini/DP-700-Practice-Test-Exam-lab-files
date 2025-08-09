@@ -1,0 +1,116 @@
+--For generating many records
+
+CREATE TABLE Numbers (n INT);
+
+INSERT INTO Numbers (n) VALUES 
+(0),(1),(2),(3),(4),(5),(6),(7),(8),(9),
+(10),(11),(12),(13),(14),(15),(16),(17),(18),(19),
+(20),(21),(22),(23),(24),(25),(26),(27),(28),(29),
+(30),(31),(32),(33),(34),(35),(36),(37),(38),(39),
+(40),(41),(42),(43),(44),(45),(46),(47),(48),(49),
+(50),(51),(52),(53),(54),(55),(56),(57),(58),(59),
+(60),(61),(62),(63),(64),(65),(66),(67),(68),(69),
+(70),(71),(72),(73),(74),(75),(76),(77),(78),(79),
+(80),(81),(82),(83),(84),(85),(86),(87),(88),(89),
+(90),(91),(92),(93),(94),(95),(96),(97),(98),(99);
+
+--Create MD5 hash dim and fact tables
+
+CREATE TABLE DimProduct_MD5 (
+    ProductKey CHAR(32) NOT NULL,
+    ProductName VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE FactSales_MD5 (
+    ProductKey CHAR(32) NOT NULL,
+    SaleDate DATE NOT NULL,
+    Quantity INT NOT NULL,
+    SalesAmount DECIMAL(10,2) NOT NULL
+);
+
+--Insert data
+
+INSERT INTO DimProduct_MD5 (ProductKey, ProductName)
+VALUES
+    (LOWER(CONVERT(CHAR(32), HASHBYTES('MD5', 'Laptop'), 2)), 'Laptop'),
+    (LOWER(CONVERT(CHAR(32), HASHBYTES('MD5', 'Phone'), 2)), 'Phone'),
+    (LOWER(CONVERT(CHAR(32), HASHBYTES('MD5', 'Tablet'), 2)), 'Tablet'),
+    (LOWER(CONVERT(CHAR(32), HASHBYTES('MD5', 'Shirt'), 2)), 'Shirt'),
+    (LOWER(CONVERT(CHAR(32), HASHBYTES('MD5', 'Shoes'), 2)), 'Shoes');
+
+-- Generate 50,000 rows (5 products × 100 × 100)
+
+INSERT INTO FactSales_MD5 (ProductKey, SaleDate, Quantity, SalesAmount)
+SELECT
+    p.ProductKey,
+    DATEADD(DAY, n1.n + n2.n * 100, '2024-01-01'),
+    1 + ABS(CHECKSUM(NEWID())) % 5,
+    100 + ABS(CHECKSUM(NEWID())) % 900
+FROM DimProduct_MD5 p
+CROSS JOIN Numbers n1
+CROSS JOIN Numbers n2;
+
+--Create a schema-bound inline table-valued function
+
+CREATE FUNCTION dbo.fnRLS_ProductFilter(@ProductKey INT)
+RETURNS TABLE
+WITH SCHEMABINDING
+AS
+RETURN
+    SELECT 1 AS fn_access_result
+    WHERE @ProductKey IN (1, 2);  -- Allowed ProductKeys for this demo
+GO
+
+-- Create the security policy and bind it
+
+CREATE SECURITY POLICY FactSalesRLS
+ADD FILTER PREDICATE dbo.fnRLS_ProductFilter(ProductKey)
+ON dbo.FactSales_MD5
+WITH (STATE = ON);
+GO
+
+--Create dim and fact tables with integer surrogate keys
+
+CREATE TABLE DimProduct_Int (
+    ProductKey INT NOT NULL,
+    ProductName VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE FactSales_Int (
+    ProductKey INT NOT NULL,
+    SaleDate DATE NOT NULL,
+    Quantity INT NOT NULL,
+    SalesAmount DECIMAL(10,2) NOT NULL
+);
+
+
+INSERT INTO DimProduct_Int (ProductKey, ProductName)
+VALUES
+    (1, 'Laptop'),
+    (2, 'Phone'),
+    (3, 'Tablet'),
+    (4, 'Shirt'),
+    (5, 'Shoes');
+
+-- Generate 50,000 rows (5 products × 100 × 100)
+INSERT INTO FactSales_Int (ProductKey, SaleDate, Quantity, SalesAmount)
+SELECT
+    p.ProductKey,
+    DATEADD(DAY, n1.n + n2.n * 100, '2024-01-01'),
+    1 + ABS(CHECKSUM(NEWID())) % 5,
+    100 + ABS(CHECKSUM(NEWID())) % 900
+FROM DimProduct_Int p
+CROSS JOIN Numbers n1
+CROSS JOIN Numbers n2;
+
+-- MD5 join
+SELECT COUNT(*)
+FROM FactSales_MD5 f
+JOIN DimProduct_MD5 d
+  ON f.ProductKey = d.ProductKey;
+
+-- Integer join
+SELECT COUNT(*)
+FROM FactSales_Int f
+JOIN DimProduct_Int d
+  ON f.ProductKey = d.ProductKey;
