@@ -52,13 +52,16 @@ CROSS JOIN Numbers n2;
 
 --Create a schema-bound inline table-valued function
 
-CREATE FUNCTION dbo.fnRLS_ProductFilter(@ProductKey INT)
+CREATE FUNCTION dbo.fnRLS_ProductFilter(@ProductKey CHAR(32))
 RETURNS TABLE
 WITH SCHEMABINDING
 AS
 RETURN
     SELECT 1 AS fn_access_result
-    WHERE @ProductKey IN (1, 2);  -- Allowed ProductKeys for this demo
+    WHERE @ProductKey IN (
+        LOWER(CONVERT(CHAR(32), HASHBYTES('MD5', 'Laptop'), 2)),
+        LOWER(CONVERT(CHAR(32), HASHBYTES('MD5', 'Phone'), 2))
+    );
 GO
 
 -- Create the security policy and bind it
