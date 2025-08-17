@@ -1,0 +1,48 @@
+CREATE TABLE dbo.Patients (
+  PatientID INT,
+  FullName VARCHAR(150),
+  DateOfBirth DATE,
+  Diagnosis VARCHAR(255),
+  BillingAmount DECIMAL(10,2)
+);
+
+
+-- Insert sample patient data
+INSERT INTO dbo.Patients (PatientID, FullName, DateOfBirth, Diagnosis, BillingAmount)
+VALUES
+(1, 'Anita Sharma',  '1985-04-12', 'Hypertension',         1500.00),
+(2, 'Rajiv Menon',   '1978-11-25', 'Type 2 Diabetes',      2300.50),
+(3, 'Meera Kapoor',  '1990-07-08', 'Asthma',               1200.75),
+(4, 'Suresh Iyer',   '1965-01-30', 'Coronary Artery Disease', 5400.00),
+(5, 'Lakshmi Rao',   '1995-09-15', 'Migraine',              800.00),
+(6, 'Vikram Patel',  '1982-03-22', 'Chronic Kidney Disease', 6200.00),
+(7, 'Pooja Nair',    '2001-06-19', 'Seasonal Allergy',      500.25),
+(8, 'Arjun Desai',   '1970-12-05', 'Arthritis',            3100.00),
+(9, 'Nandita Joshi', '1988-02-14', 'Anemia',                900.00),
+(10,'Manish Gupta',  '1993-08-27', 'Gastritis',            1400.50);
+
+
+--Select data
+SELECT * FROM dbo.Patients
+SELECT PatientID, FullName, DateOfBirth, Diagnosis FROM dbo.Patients
+
+
+-- GRANT SELECT and REVOKE SELECT
+GRANT 
+SELECT 
+  ON dbo.Patients (
+    PatientID, FullName, DateOfBirth, 
+    Diagnosis
+  ) TO [clientone@<<yourdomain>>.com];
+
+
+REVOKE SELECT ON dbo.Patients TO [clientone@<<yourdomain>>.com];
+
+
+-- DENY SELECT and REVOKE SELECT
+DENY 
+SELECT 
+  ON dbo.Patients (BillingAmount) TO [clientone@<<yourdomain>>.com];
+
+
+REVOKE SELECT ON dbo.Patients (BillingAmount) FROM [clientone@<<yourdomain>>.com];
