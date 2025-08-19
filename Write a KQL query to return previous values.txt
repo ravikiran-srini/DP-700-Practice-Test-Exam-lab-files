@@ -1,0 +1,48 @@
+//Create table and ingest data
+.create table StockTrades (
+    Ticker:string,
+    TradeDate:datetime,
+    ClosePrice:real
+)
+
+.ingest inline into table StockTrades <|
+AAPL, 2024-08-01, 150.0
+AAPL, 2024-08-02, 152.0
+AAPL, 2024-08-03, 153.0
+MSFT, 2024-08-01, 300.0
+MSFT, 2024-08-02, 305.0
+MSFT, 2024-08-03, 310.0
+
+
+//option A
+StockTrades
+| partition by Ticker (
+    order by TradeDate asc
+    | extend PrevClosePrice = prev(ClosePrice),
+             PriceChange    = ClosePrice - PrevClosePrice
+)
+
+
+//option B
+StockTrades
+| partition by Ticker (
+    order by TradeDate asc
+    | extend PrevClosePrice = prev(ClosePrice)
+    | extend PriceChange = ClosePrice - PrevClosePrice
+)
+
+
+//option C
+StockTrades
+| order by Ticker asc, TradeDate asc
+| extend PrevClosePrice = prev(ClosePrice)
+| extend PriceChange = ClosePrice - PrevClosePrice
+
+
+//option D
+StockTrades
+| partition by Ticker (
+    order by TradeDate desc
+    | extend PrevClosePrice = prev(ClosePrice)
+    | extend PriceChange    = ClosePrice - PrevClosePrice
+)
