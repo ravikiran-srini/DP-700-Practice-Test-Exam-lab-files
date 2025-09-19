@@ -14,5 +14,5 @@ https://ravikirans.com/dp-700-official-practice-test-part-3/
 
 **YouTube Video DP-700:**
 
-https://youtu.be/3UmN6pngiZA
+https://youtu.be/ywkeG-P84TA
 
